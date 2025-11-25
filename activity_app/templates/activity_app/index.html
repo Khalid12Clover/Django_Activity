@@ -104,9 +104,13 @@ function doAction1(activityName, btn) {
     })
     .then(res => res.json())
     .then(data => {
-        alert(data.message);
-        btn.disabled = false;
-        btn.innerText = "Run Ansible";
+    if (data.status === "error") {
+        alert("ERROR:\n" + data.message + "\n\nDetails:\n" + (data.stderr || data.stdout || ""));
+    } else {
+        alert("SUCCESS:\n" + data.message + "\n\n" + data.stdout);
+    }
+    btn.disabled = false;
+    btn.innerText = "Run Ansible";
     })
     .catch(err => {
         alert("Error executing Ansible");
