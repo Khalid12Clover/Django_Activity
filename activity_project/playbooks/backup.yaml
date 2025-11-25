@@ -1,0 +1,12 @@
+---
+- name: Backup Playbook
+  hosts: localhost
+  connection: local
+
+  vars:
+    activity: ""
+
+  tasks:
+    - name: Echo backup activity
+      debug:
+        msg: "Backup process triggered for: {{ activity }}"
