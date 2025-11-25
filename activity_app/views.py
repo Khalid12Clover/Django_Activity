@@ -35,7 +35,8 @@ from django.views.decorators.http import require_POST
 def do_action1(request):
     activity_name = request.POST.get("activity")
 
-    playbook_path = f"/ansible/playbooks/{activity_name}.yml"
+    #playbook_path = "home/ansible/playbooks/{activity_name}.yml"
+    playbook_path = "home/ansible/playbooks/deploy.yaml"
 
     # ✅ Check if file exists
     if not os.path.exists(playbook_path):
