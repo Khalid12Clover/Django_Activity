@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.db import connection
 from django.views.decorators.http import require_POST
+import subprocess
+import os
 
 def index(request):
     with connection.cursor() as cursor:
@@ -33,10 +35,15 @@ from django.views.decorators.http import require_POST
 def do_action1(request):
     activity_name = request.POST.get("activity")
 
-    
-    playbook_path = "/home/ansible/playbooks/run_task.yml"
+    # Path to host-mounted folder
+    playbook_path = f"/ansible/playbooks/{activity_name}.yml"
 
-    
+    if not os.path.exists(playbook_path):
+        return JsonResponse({
+            "status": "error",
+            "message": f"Playbook not found: {playbook_path}"
+        }, status=400)
+
     cmd = [
         "ansible-playbook",
         playbook_path,
@@ -55,7 +62,7 @@ def do_action1(request):
             "activity": activity_name,
             "stdout": result.stdout,
             "stderr": result.stderr if result.stderr else "",
-            "message": f"Ansible executed for {activity_name}"
+            "message": f"Playbook executed: {activity_name}.yml"
         })
 
     except Exception as e:
@@ -63,3 +70,4 @@ def do_action1(request):
             "status": "error",
             "message": str(e)
         }, status=500)
+
