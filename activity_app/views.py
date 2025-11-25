@@ -35,13 +35,14 @@ from django.views.decorators.http import require_POST
 def do_action1(request):
     activity_name = request.POST.get("activity")
 
-    # Path to host-mounted folder
     playbook_path = f"/ansible/playbooks/{activity_name}.yml"
 
+    # ✅ Check if file exists
     if not os.path.exists(playbook_path):
         return JsonResponse({
             "status": "error",
-            "message": f"Playbook not found: {playbook_path}"
+            "message": "Playbook not found",
+            "path": playbook_path
         }, status=400)
 
     cmd = [
@@ -57,12 +58,22 @@ def do_action1(request):
             text=True
         )
 
+        # ✅ If Ansible failed (non-zero exit code)
+        if result.returncode != 0:
+            return JsonResponse({
+                "status": "error",
+                "message": "Ansible execution failed",
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "exit_code": result.returncode
+            }, status=500)
+
+        # ✅ Success
         return JsonResponse({
             "status": "success",
-            "activity": activity_name,
+            "message": f"Playbook executed: {activity_name}.yml",
             "stdout": result.stdout,
-            "stderr": result.stderr if result.stderr else "",
-            "message": f"Playbook executed: {activity_name}.yml"
+            "stderr": result.stderr
         })
 
     except Exception as e:
@@ -70,4 +81,3 @@ def do_action1(request):
             "status": "error",
             "message": str(e)
         }, status=500)
-
