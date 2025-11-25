@@ -5,10 +5,8 @@ services:
     container_name: activity_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: activitydb
-      MYSQL_USER: activityuser
-      MYSQL_PASSWORD: activitypass
+      MYSQL_ROOT_PASSWORD: clover@123
+      MYSQL_DATABASE: activity_db
     ports:
       - "3307:3306"
     volumes:
@@ -19,13 +17,13 @@ services:
     container_name: activity_django
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/app     # This is correct, keep it
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - mysql
     environment:
-      DB_NAME: activitydb
+      DB_NAME: activity_db
       DB_USER: root
       DB_PASSWORD: clover@123
       DB_HOST: mysql
