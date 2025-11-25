@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': 'activity_db',
         'USER': 'root',
         'PASSWORD': 'clover@123',
-        'HOST': 'localhost',
+        'HOST': '192.168.9.65',
         'PORT': '3306',
     }
 }
