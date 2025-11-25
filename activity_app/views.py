@@ -36,7 +36,7 @@ def do_action1(request):
     activity_name = request.POST.get("activity")
 
     #playbook_path = "home/ansible/playbooks/{activity_name}.yml"
-    playbook_path = "home/ansible/playbooks/deploy.yaml"
+    playbook_path = "/ansible/playbooks/deploy.yaml"
 
     # ✅ Check if file exists
     if not os.path.exists(playbook_path):
