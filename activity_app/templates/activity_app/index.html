@@ -104,6 +104,8 @@ function doAction1(activityName, btn) {
     })
     .then(res => res.json())
     .then(data => {
+        alert(data);
+        alert(data.status);
     if (data.status === "error") {
         alert("ERROR:\n" + data.message + "\n\nDetails:\n" + (data.stderr || data.stdout || ""));
     } else {
