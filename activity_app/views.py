@@ -27,22 +27,18 @@ def do_action(request):
         "status": "success",
         "message": f"Received action for: {activity_name}"
     })
-import subprocess
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-
+    
 @require_POST
 def do_action1(request):
     activity_name = request.POST.get("activity")
 
-    #playbook_path = "home/ansible/playbooks/{activity_name}.yml"
-    playbook_path = "/ansible/playbooks/deploy.yaml"
+    # ✅ Correct absolute path
+    playbook_path = f"/ansible/playbooks/{activity_name}.yml"
 
-    # ✅ Check if file exists
     if not os.path.exists(playbook_path):
         return JsonResponse({
             "status": "error",
-            "message": "Playbook not found",
+            "message": f"Playbook not found",
             "path": playbook_path
         }, status=400)
 
@@ -59,7 +55,6 @@ def do_action1(request):
             text=True
         )
 
-        # ✅ If Ansible failed (non-zero exit code)
         if result.returncode != 0:
             return JsonResponse({
                 "status": "error",
@@ -69,10 +64,9 @@ def do_action1(request):
                 "exit_code": result.returncode
             }, status=500)
 
-        # ✅ Success
         return JsonResponse({
             "status": "success",
-            "message": f"Playbook executed: {activity_name}.yml",
+            "message": f"Playbook executed successfully",
             "stdout": result.stdout,
             "stderr": result.stderr
         })
@@ -82,3 +76,5 @@ def do_action1(request):
             "status": "error",
             "message": str(e)
         }, status=500)
+
+
