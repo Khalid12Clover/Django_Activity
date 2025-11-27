@@ -63,3 +63,51 @@ function doAction1(activityName, btn) {
 
 </head>
 <body>
+
+<div class="container mt-4">
+
+    <div class="page-title">Activity List</div>
+
+    <div class="activity-table">
+        <table class="table table-bordered table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Action</th>
+                    <th>Schedular</th>
+                    <th>Ansible Call</th> <!-- NEW COLUMN -->
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.activity }}</td>
+
+                    <td>
+                        <button class="btn btn-primary btn-action"
+                                onclick="doAction('{{ r.activity }}', this)">
+                            Click
+                        </button>
+                    </td>
+
+                    <td>{{ r.schedular }}</td>
+
+                    <!-- NEW Ansible Call Button -->
+                    <td>
+                        <button class="btn btn-success btn-action"
+                                onclick="doAction1('{{ r.activity }}', this)">
+                            Run Ansible
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
